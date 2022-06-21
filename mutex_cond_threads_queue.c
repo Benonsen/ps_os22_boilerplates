@@ -42,13 +42,14 @@ void *myThreadFun(void *vargp)
             pthread_cond_wait(&my_data->cond, &my_data->mutex);
         }
         val = myqueue_pop(my_data->q);
+        pthread_mutex_unlock(&my_data->mutex);
+
         sum += val;
         if (val == 0)
         {
             b = false;
         }
 
-        pthread_mutex_unlock(&my_data->mutex);
     }
     int *ret = malloc(sizeof(int));
     *ret = sum;
@@ -108,5 +109,5 @@ int main()
     pthread_cond_destroy(&(my_data->cond));
     pthread_mutex_destroy(&(my_data->mutex));
     free(my_data);
-    return 0;
+    return EXIT_SUCCESS;
 }
